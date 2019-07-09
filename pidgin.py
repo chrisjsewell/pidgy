@@ -370,6 +370,10 @@ def run_docstring_examples(str, shell=shell, verbose=False, compileflags=None):
             test.globs = globs
             runner.run(test, compileflags=compileflags, clear_globs=False)
 
+    for key, value in globs.get("__annotations__", {}).items():
+        if key not in globs:
+            globs[key] = value
+
     runner._checker = InlineOutputCheck()
     with wrapped_compiler(shell):
         for test in doctest.DocTestFinder(verbose, InlineDoctestParser()).find(
